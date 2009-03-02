@@ -87,9 +87,13 @@
 			// context array contains: &$params
 			$Frontend = Frontend::instance();
 
-			if (isset($Frontend->__indexisdefault) && !empty($Frontend->__indexisdefault['params'])) {
+			if (!isset($Frontend->__indexisdefault)) return;
+
+			if(!empty($Frontend->__indexisdefault['params'])) {
 				$ctx['params'] = array_merge($ctx['params'], $Frontend->__indexisdefault['params']);
 			}
+
+			unset($Frontend->__indexisdefault);
 		}
 	}
 ?>
