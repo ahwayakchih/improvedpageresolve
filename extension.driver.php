@@ -39,7 +39,7 @@
 			$row = $Frontend->Database->fetchRow(0, "SELECT p.*, t.type FROM `tbl_pages` p
 				 LEFT JOIN `tbl_pages_types` t ON p.id = t.page_id AND t.type = 'index'
 				 WHERE POSITION(CONCAT_WS('/', p.path, p.handle) IN '".$Frontend->Database->cleanValue($page)."') = 1 OR
-				  (t.type = 'index' AND (LENGTH(p.params)-LENGTH(REPLACE(COALESCE(p.params,''), '/', ''))) >= {$nodeCount})
+				  (t.type = 'index' AND p.params IS NOT NULL AND (LENGTH(p.params)-LENGTH(REPLACE(COALESCE(p.params,''), '/', ''))+1) >= {$nodeCount})
 				 ORDER BY (LENGTH(p.path)-LENGTH(REPLACE(COALESCE(p.path,''), '/', ''))+1) DESC, p.sortorder DESC
 				 LIMIT 1");
 			if(!$row) $row = array();
