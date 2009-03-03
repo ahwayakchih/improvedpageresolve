@@ -38,7 +38,7 @@
 			$nodeCount = substr_count($page, '/') + 1;
 			$row = $Frontend->Database->fetchRow(0, "SELECT p.*, t.type FROM `tbl_pages` p
 				 LEFT JOIN `tbl_pages_types` t ON p.id = t.page_id AND t.type = 'index'
-				 WHERE POSITION(CONCAT_WS('/', p.path, p.handle) IN '{$page}') = 1 OR
+				 WHERE POSITION(CONCAT_WS('/', p.path, p.handle) IN '".$Frontend->Database->cleanValue($page)."') = 1 OR
 				  (t.type = 'index' AND (LENGTH(p.params)-LENGTH(REPLACE(COALESCE(p.params,''), '/', ''))) >= {$nodeCount})
 				 ORDER BY (LENGTH(p.path)-LENGTH(REPLACE(COALESCE(p.path,''), '/', ''))+1) DESC, p.sortorder DESC
 				 LIMIT 1");
@@ -60,7 +60,7 @@
 						// (_env is private, and is overwritten with NULL values right after delegate returns).
 						// We also can't set Frontpage->_param directly, because it is recreated later (after FrontendPageResolved delegate).
 						// Nor we can store params localy, because extension seems to be recreated every time delegate is called.
-						// So we store params in global place ($Frontend :) and inject params when FrontendParamsResolve delegate is called.
+						// So we store params in global place ($Frontend :) and inject them when FrontendParamsResolve delegate is called.
 						$Frontend->__indexisdefault['params'] = array_combine($params, array_pad($values, count($params), NULL));
 					}
 				}
