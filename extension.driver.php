@@ -35,48 +35,34 @@
 
 			$Frontend = Frontend::instance();
 
-			// Based on code found in Frontpage->resolvePage function (symphony/lib/toolkit/class.frontpage.php)
-			$pathArr = preg_split('/\//', $page, -1, PREG_SPLIT_NO_EMPTY);
+			$nodeCount = substr_count($page, '/') + 1;
+			$row = $Frontend->Database->fetchRow(0, "SELECT p.*, t.type FROM `tbl_pages` p
+				 LEFT JOIN `tbl_pages_types` t ON p.id = t.page_id AND t.type = 'index'
+				 WHERE POSITION(CONCAT_WS('/', p.path, p.handle) IN '{$page}') = 1 OR
+				  (t.type = 'index' AND (LENGTH(p.params)-LENGTH(REPLACE(COALESCE(p.params,''), '/', ''))) >= {$nodeCount})
+				 ORDER BY (LENGTH(p.path)-LENGTH(REPLACE(COALESCE(p.path,''), '/', ''))+1) DESC, p.sortorder DESC
+				 LIMIT 1");
+			if(!$row) $row = array();
 
-			$valid_page_path = array();
-			$page_extra_bits = array();
-	
-			$handle = array_pop($pathArr);
+			$path = ($row['path'] ? $row['path'].'/'.$row['handle'] : $row['handle']);
+			$values = trim(str_replace($path, '', $page), '/');
 
-			do{
-				$path = implode('/', $pathArr);
-				$sql = "SELECT * FROM `tbl_pages`
-					WHERE `path` ".($path ? " = '$path'" : 'IS NULL')." 
-					AND `handle` = '$handle' LIMIT 1";
-				if($row = $Frontend->Database->fetchRow(0, $sql)){
-					array_push($pathArr, $handle);
-					$valid_page_path = $pathArr;
-
-					break 1;	
-
-				}else
-					$page_extra_bits[] = $handle;
-			}while($handle = array_pop($pathArr));
-			
-			if(empty($valid_page_path)){
-				$row = $Frontend->Database->fetchRow(0, "SELECT `tbl_pages`.* FROM `tbl_pages`, `tbl_pages_types` 
-															  WHERE `tbl_pages_types`.page_id = `tbl_pages`.id 
-															  AND tbl_pages_types.`type` = 'index' 
-															  LIMIT 1");
-
+			if(!empty($values)){
+				// Try to stay compatible with original by rejecting page if there are too many values passed to it
 				if(empty($row['params'])) $row = array();
-			}
+				else{
+					$values = preg_split('/\//', $values, -1, PREG_SPLIT_NO_EMPTY);
+					$params = preg_split('/\//', $row['params'], -1, PREG_SPLIT_NO_EMPTY);
 
-			if(!empty($row['params'])){
-				$schema = preg_split('/\//', $row['params'], -1, PREG_SPLIT_NO_EMPTY);
-				if(count($schema) < count($page_extra_bits)) $row = array();
-				else if(!empty($page_extra_bits)){
-					// There is no way to tell Frontpage to set _env['url'] values
-					// (_env is private, and is overwritten with NULL values right after delegate returns).
-					// We also can't set Frontpage->_param directly, because it is recreated later (after FrontendPageResolved delegate).
-					// Nor we can store params localy, because extension seems to be recreated every time delegate is called.
-					// So we store params in global place ($Frontend :) and inject params when FrontendParamsResolve delegate is called.
-					$Frontend->__indexisdefault['params'] = array_combine($schema, array_pad(array_reverse($page_extra_bits), count($schema), NULL));
+					if(count($params) < count($values)) $row = array();
+					else if(!empty($values)){
+						// There is no way to tell Frontpage to set _env['url'] values
+						// (_env is private, and is overwritten with NULL values right after delegate returns).
+						// We also can't set Frontpage->_param directly, because it is recreated later (after FrontendPageResolved delegate).
+						// Nor we can store params localy, because extension seems to be recreated every time delegate is called.
+						// So we store params in global place ($Frontend :) and inject params when FrontendParamsResolve delegate is called.
+						$Frontend->__indexisdefault['params'] = array_combine($params, array_pad($values, count($params), NULL));
+					}
 				}
 			}
 
