@@ -61,7 +61,7 @@
 						// We also can't set Frontpage->_param directly, because it is recreated later (after FrontendPageResolved delegate).
 						// Nor we can store params localy, because extension seems to be recreated every time delegate is called.
 						// So we store params in global place ($Frontend :) and inject them when FrontendParamsResolve delegate is called.
-						$Frontend->__indexisdefault['params'] = array_combine($params, array_pad($values, count($params), NULL));
+						$Frontend->__improvedpageresolve['params'] = array_combine($params, array_pad($values, count($params), NULL));
 					}
 				}
 			}
@@ -73,13 +73,13 @@
 			// context array contains: &$params
 			$Frontend = Frontend::instance();
 
-			if (!isset($Frontend->__indexisdefault)) return;
+			if (!isset($Frontend->__improvedpageresolve)) return;
 
-			if(!empty($Frontend->__indexisdefault['params'])) {
-				$ctx['params'] = array_merge($ctx['params'], $Frontend->__indexisdefault['params']);
+			if(!empty($Frontend->__improvedpageresolve['params'])) {
+				$ctx['params'] = array_merge($ctx['params'], $Frontend->__improvedpageresolve['params']);
 			}
 
-			unset($Frontend->__indexisdefault);
+			unset($Frontend->__improvedpageresolve);
 		}
 	}
 ?>
