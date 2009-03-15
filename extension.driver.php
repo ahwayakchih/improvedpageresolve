@@ -2,13 +2,13 @@
 	Class extension_improvedpageresolve extends Extension{
 	
 		public function about(){
-			return array('name' => 'Improved Page Resolve',
+			return array('name' => __('Improved Page Resolve'),
 						 'version' => '1.0',
 						 'release-date' => '2009-03-02',
 						 'author' => array('name' => 'Marcin Konicki',
 										   'website' => 'http://ahwayakchih.neoni.net',
 										   'email' => 'ahwayakchih@neoni.net'),
-						 'description' => 'Pass parameters to index if none of them selects valid page.'
+						 'description' => __('Pass parameters to index if none of them selects valid page.')
 			);
 		}
 
@@ -82,4 +82,4 @@
 			unset($Frontend->__improvedpageresolve);
 		}
 	}
-?>
+
