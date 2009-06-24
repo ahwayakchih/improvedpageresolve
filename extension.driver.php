@@ -45,7 +45,7 @@
 			if(!$row) $row = array();
 
 			$path = ($row['path'] ? $row['path'].'/'.$row['handle'] : $row['handle']);
-			$values = trim(ltrim($page, $path), '/');
+			$values = trim(preg_replace('/^'.preg_quote($path, '/').'/i', '', $page), '/');
 
 			if(!empty($values)){
 				// Try to stay compatible with original by rejecting page if there are too many values passed to it
