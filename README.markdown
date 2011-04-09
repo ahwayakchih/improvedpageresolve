@@ -7,8 +7,8 @@
 
 ## Overview
 
-Improved Page Resolve allows you to create index page with parameters and 
-show it without a need to include its path in URL. For example:
+Improved Page Resolve allows you to create index page with parameters and show it without a need to include its path in URL.
+For example:
 
 http://www.example.com/param_1_value/param_2_value
 
@@ -16,8 +16,7 @@ will work the same way as:
 
 http://www.example.com/url_handle_of_index_page/param_1_value/param_2_value
 
-Unless there is a page with path that is the same as param_1_value, in which case 
-that page will be shown.
+Unless there is a page with path that is the same as param_1_value, in which case that page will be shown.
 
 ## Installation
 
