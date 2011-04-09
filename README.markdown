@@ -2,7 +2,7 @@
 
 - Version: 1.1
 - Author: Marcin Konicki (http://ahwayakchih.neoni.net)
-- Build Date: 9 April 2009
+- Build Date: 9 April 2011
 - Requirements: Symphony version 2.2 or later.
 
 ## Overview
