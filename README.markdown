@@ -1,8 +1,8 @@
 # Improved Page Resolve
 
-- Version: 1.1
+- Version: 1.2
 - Author: Marcin Konicki (http://ahwayakchih.neoni.net)
-- Build Date: 9 April 2011
+- Build Date: 28 June 2012
 - Requirements: Symphony version 2.2 or later.
 
 ## Overview
@@ -25,6 +25,7 @@ Unless there is a page with path that is the same as param_1_value, in which cas
 
 ## Changelog
 
+- **1.2** Update for Symphony 2.3. This may break compatibility with Symphony 2.2. Fixed selection of pages that match name but are non-index type.
 - **1.1** Update for Symphony 2.2.
 - **1.0** Initial release.
 

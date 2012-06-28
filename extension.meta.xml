@@ -1,0 +1,28 @@
+<extension id="improvedpageresolve" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+	<name>Improved Page Resolve</name>
+	<description>Improved Page Resolve allows you to create index page with parameters and show it without a need to include its path in URL.</description>
+	<repo type="github">https://github.com/ahwayakchih/improvedpageresolve</repo>
+	<url type="discuss">http://symphony-cms.com/discuss/thread/66671/</url>
+	<url type="issues">https://github.com/ahwayakchih/improvedpageresolve/issues</url>
+	<types>
+		<type>Other</type>
+	</types>
+	<authors>
+		<author>
+			<name github="ahwayakchih" symphony="ahwayakchih">Marcin Konicki</name>
+			<email>ahwayakchih@neoni.net</email>
+			<website>http://ahwayakchih.neoni.net</website>
+		</author>
+	</authors>
+	<releases>
+		<release version="1.2" date="2012-06-28" min="2.3">
+			- Update for Symphony 2.3. This may break compatibility with Symphony 2.2.
+			- Fixed selection of pages that match name but are non-index type.
+		</release>
+		<release version="1.1" date="2011-04-09" min="2.2" max="2.2.x">Update for Symphony 2.2.</release>
+		<release version="1.0" date="2009-03-02" min="2.0.2" max="2.2">Initial release.</release>
+	</releases>
+	<media>
+		<item type="image" url="https://github.com/ahwayakchih/conditionalizer/raw/master/screenshots/flyer.png">Screenshots.</item>
+	</media>
+</extension>

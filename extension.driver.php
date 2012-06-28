@@ -1,14 +1,14 @@
 <?php
 	Class extension_improvedpageresolve extends Extension{
 	
-		public function about(){
+		public function about() {
 			return array('name' => __('Improved Page Resolve'),
-						 'version' => '1.1',
-						 'release-date' => '2011-04-09',
+						 'version' => '1.2',
+						 'release-date' => '2012-06-28',
 						 'author' => array('name' => 'Marcin Konicki',
 										   'website' => 'http://ahwayakchih.neoni.net',
 										   'email' => 'ahwayakchih@neoni.net'),
-						 'description' => __('Pass parameters to index if none of them selects valid page.')
+						 'description' => __('Pass parameters to index if none of them selects a valid page.')
 			);
 		}
 
@@ -38,22 +38,22 @@
 				 LEFT JOIN `tbl_pages_types` t ON p.id = t.page_id AND t.type = 'index'
 				 WHERE POSITION(CONCAT_WS('/', p.path, p.handle) IN '".Symphony::Database()->cleanValue($page)."') = 1 OR
 				  (t.type = 'index' AND p.params IS NOT NULL AND (LENGTH(p.params)-LENGTH(REPLACE(COALESCE(p.params,''), '/', ''))+1) >= {$nodeCount})
-				 ORDER BY (LENGTH(p.path)-LENGTH(REPLACE(COALESCE(p.path,''), '/', ''))+1) DESC, p.sortorder DESC
+				 ORDER BY t.type != 'index' ASC, (LENGTH(p.path)-LENGTH(REPLACE(COALESCE(p.path,''), '/', ''))+1) DESC, p.sortorder DESC
 				 LIMIT 1");
-			if(!$row) $row = array();
+			if (!$row) $row = array();
 
 			$path = ($row['path'] ? $row['path'].'/'.$row['handle'] : $row['handle']);
 			$values = trim(preg_replace('/^'.preg_quote($path, '/').'/i', '', $page), '/');
 
-			if(!empty($values)){
+			if (!empty($values)) {
 				// Try to stay compatible with original by rejecting page if there are too many values passed to it
-				if(empty($row['params'])) $row = array();
-				else{
+				if (empty($row['params'])) $row = array();
+				else {
 					$values = preg_split('/\//', $values, -1, PREG_SPLIT_NO_EMPTY);
 					$params = preg_split('/\//', $row['params'], -1, PREG_SPLIT_NO_EMPTY);
 
-					if(count($params) < count($values)) $row = array();
-					else if(!empty($values)){
+					if (count($params) < count($values)) $row = array();
+					else if (!empty($values)) {
 						// There is no way to tell Frontpage to set _env['url'] values
 						// (_env is private, and is overwritten with NULL values right after delegate returns).
 						// We also can't set Frontpage->_param directly, because it is recreated later (after FrontendPageResolved delegate).
@@ -73,7 +73,7 @@
 
 			if (!isset($Frontend->__improvedpageresolve)) return;
 
-			if(!empty($Frontend->__improvedpageresolve['params'])) {
+			if (!empty($Frontend->__improvedpageresolve['params'])) {
 				$ctx['params'] = array_merge($ctx['params'], $Frontend->__improvedpageresolve['params']);
 			}
 
