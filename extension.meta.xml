@@ -22,7 +22,4 @@
 		<release version="1.1" date="2011-04-09" min="2.2" max="2.2.x">Update for Symphony 2.2.</release>
 		<release version="1.0" date="2009-03-02" min="2.0.2" max="2.2">Initial release.</release>
 	</releases>
-	<media>
-		<item type="image" url="https://github.com/ahwayakchih/conditionalizer/raw/master/screenshots/flyer.png">Screenshots.</item>
-	</media>
 </extension>
